@@ -1,0 +1,206 @@
+name: Deploy AI Agent Academy
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test and Validate
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Validate HTML
+      run: npm run validate-html
+      continue-on-error: true
+      
+    - name: Lint JavaScript
+      run: npm run lint
+      continue-on-error: true
+      
+    - name: Check formatting
+      run: npx prettier --check .
+      continue-on-error: true
+      
+    - name: Test website accessibility
+      uses: accessibility-checker/axe-action@v3
+      with:
+        site-url: 'http://localhost:8000'
+        fail-on-error: false
+        
+    - name: Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        configPath: '.lighthouserc.json'
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Deploy to Vercel Preview
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        scope: ${{ secrets.VERCEL_ORG_ID }}
+        
+    - name: Comment PR with preview URL
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🚀 Preview deployed! View at: ${{ steps.deploy.outputs.preview-url }}`
+          })
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Optimize images
+      run: npm run optimize-images
+      continue-on-error: true
+      
+    - name: Generate sitemap
+      run: npm run generate-sitemap
+      continue-on-error: true
+      
+    - name: Deploy to Vercel Production
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod'
+        scope: ${{ secrets.VERCEL_ORG_ID }}
+        
+    - name: Update deployment status
+      run: echo "✅ Deployed to production successfully!"
+      
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  performance-audit:
+    name: Performance Audit
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Audit URLs using Lighthouse
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        urls: |
+          https://ai-agent-academy.vercel.app
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+        
+    - name: Comment with performance results
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const results = JSON.parse(fs.readFileSync('lhci_reports/manifest.json', 'utf8'));
+          const summary = results[0].summary;
+          
+          const comment = `## ⚡ Performance Audit Results
+          
+          | Metric | Score |
+          |--------|-------|
+          | Performance | ${Math.round(summary.performance * 100)}% |
+          | Accessibility | ${Math.round(summary.accessibility * 100)}% |
+          | Best Practices | ${Math.round(summary['best-practices'] * 100)}% |
+          | SEO | ${Math.round(summary.seo * 100)}% |
+          
+          View detailed report: [Lighthouse Report](${results[0].url})
+          `;
+          
+          github.rest.repos.createCommitComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: context.sha,
+            body: comment
+          })
+
+  notify-discord:
+    name: Notify Discord
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: always() && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Discord notification
+      uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: |
+          🚀 **AI Agent Academy** deployed successfully!
+          
+          📊 **Status**: ${{ needs.deploy-production.result == 'success' && '✅ Success' || '❌ Failed' }}
+          🔗 **URL**: https://ai-agent-academy.vercel.app
+          📝 **Commit**: ${{ github.event.head_commit.message }}
+          👤 **Author**: ${{ github.event.head_commit.author.name }}

@@ -1,0 +1,103 @@
+{
+  "name": "ai-agent-academy",
+  "version": "1.0.0",
+  "description": "A comprehensive educational platform for learning AI agent development",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "npx http-server -p 8000 -c-1",
+    "build": "echo 'No build step required - using vanilla HTML/CSS/JS'",
+    "test": "echo 'No tests configured yet'",
+    "deploy": "vercel --prod",
+    "preview": "vercel",
+    "lint": "eslint js/ --fix",
+    "format": "prettier --write .",
+    "validate-html": "html-validate index.html",
+    "optimize-images": "imagemin images/* --out-dir=images/optimized",
+    "generate-sitemap": "node scripts/generate-sitemap.js"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "artificial-intelligence",
+    "machine-learning",
+    "education",
+    "tutorial",
+    "course",
+    "programming",
+    "python",
+    "langchain",
+    "openai",
+    "automation"
+  ],
+  "author": "AI Agent Academy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ai-agent-academy/website.git"
+  },
+  "homepage": "https://ai-agent-academy.vercel.app",
+  "bugs": {
+    "url": "https://github.com/ai-agent-academy/website/issues"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3",
+    "html-validate": "^8.5.0",
+    "http-server": "^14.1.1",
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-svgo": "^10.0.1",
+    "imagemin-webp": "^7.0.0",
+    "sitemap-generator": "^8.5.1"
+  },
+  "optionalDependencies": {
+    "vercel": "^32.4.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "config": {
+    "port": 8000,
+    "host": "localhost"
+  },
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 80,
+    "tabWidth": 2
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "warn",
+      "semi": ["error", "always"],
+      "quotes": ["error", "single"]
+    }
+  },
+  "htmlValidate": {
+    "extends": ["html-validate:recommended"],
+    "rules": {
+      "require-sri": "off",
+      "no-inline-style": "off"
+    }
+  }
+}

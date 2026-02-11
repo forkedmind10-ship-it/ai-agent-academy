@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Academy - Master the Art of AI Agent Development</title>
+    <meta name="description" content="Learn to build powerful AI agents with hands-on tutorials, practical examples, and expert guidance. Start your journey in AI agent development today.">
+    <meta name="keywords" content="AI agents, artificial intelligence, machine learning, tutorial, course, programming, python, langchain, openai, automation">
+    <meta name="author" content="AI Agent Academy">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ai-agent-academy.vercel.app">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ai-agent-academy.vercel.app">
+    <meta property="og:title" content="AI Agent Academy - Master AI Agent Development">
+    <meta property="og:description" content="Learn to build intelligent AI agents with hands-on tutorials, practical examples, and expert guidance">
+    <meta property="og:image" content="https://ai-agent-academy.vercel.app/images/og-image.jpg">
+    <meta property="og:site_name" content="AI Agent Academy">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ai-agent-academy.vercel.app">
+    <meta property="twitter:title" content="AI Agent Academy - Master AI Agent Development">
+    <meta property="twitter:description" content="Learn to build intelligent AI agents with hands-on tutorials, practical examples, and expert guidance">
+    <meta property="twitter:image" content="https://ai-agent-academy.vercel.app/images/twitter-image.jpg">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#00d4ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AI Academy">
+    <link rel="apple-touch-icon" href="images/icons/icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "AI Agent Academy",
+      "url": "https://ai-agent-academy.vercel.app",
+      "logo": "https://ai-agent-academy.vercel.app/images/logo.png",
+      "description": "Comprehensive AI agent development education platform with hands-on tutorials and practical examples",
+      "educationalCredentialAwarded": "AI Agent Development Certificate",
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "AI Agent Developer Certificate",
+        "description": "Professional certification in AI agent development"
+      },
+      "courseMode": "online",
+      "availableLanguage": "en",
+      "offers": {
+        "@type": "Offer",
+        "category": "Education",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-robot"></i>
+                <span>AI Agent Academy</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#courses" class="nav-link">Courses</a></li>
+                <li><a href="#tutorials" class="nav-link">Tutorials</a></li>
+                <li><a href="#examples" class="nav-link">Examples</a></li>
+                <li><a href="#playground" class="nav-link">Playground</a></li>
+                <li><a href="#community" class="nav-link">Community</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Master the Art of <span class="gradient-text">AI Agent Development</span></h1>
+                <p class="hero-description">Learn to build intelligent, autonomous AI agents that can reason, plan, and act. From beginner to expert with hands-on tutorials and real-world projects.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('courses')">Start Learning</button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('playground')">Try Playground</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10,000+</span>
+                        <span class="stat-label">Students</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Tutorials</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">Examples</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="agent-diagram">
+                    <div class="agent-node active" id="perception">
+                        <i class="fas fa-eye"></i>
+                        <span>Perception</span>
+                    </div>
+                    <div class="agent-node" id="reasoning">
+                        <i class="fas fa-brain"></i>
+                        <span>Reasoning</span>
+                    </div>
+                    <div class="agent-node" id="planning">
+                        <i class="fas fa-map"></i>
+                        <span>Planning</span>
+                    </div>
+                    <div class="agent-node" id="action">
+                        <i class="fas fa-rocket"></i>
+                        <span>Action</span>
+                    </div>
+                    <div class="connections">
+                        <div class="connection" data-from="perception" data-to="reasoning"></div>
+                        <div class="connection" data-from="reasoning" data-to="planning"></div>
+                        <div class="connection" data-from="planning" data-to="action"></div>
+                        <div class="connection" data-from="action" data-to="perception"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose AI Agent Academy?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>Hands-On Learning</h3>
+                    <p>Build real AI agents from day one. No theory-only courses - everything you learn, you implement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Production-Ready Code</h3>
+                    <p>Learn industry best practices and patterns used by top AI companies and research labs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Expert Community</h3>
+                    <p>Join thousands of AI developers, get help, share projects, and collaborate on cutting-edge research.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Latest Technologies</h3>
+                    <p>Stay ahead with courses on the newest frameworks, models, and agent architectures.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="courses">
+        <div class="container">
+            <h2 class="section-title">Learning Pathways</h2>
+            <p class="section-subtitle">Structured courses designed to take you from beginner to AI agent expert</p>
+            
+            <div class="course-tabs">
+                <button class="tab-btn active" data-tab="beginner">Beginner</button>
+                <button class="tab-btn" data-tab="intermediate">Intermediate</button>
+                <button class="tab-btn" data-tab="advanced">Advanced</button>
+                <button class="tab-btn" data-tab="specialization">Specialization</button>
+            </div>
+
+            <div class="course-content">
+                <div class="tab-content active" id="beginner">
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Beginner</div>
+                                <div class="course-duration">6 weeks</div>
+                            </div>
+                            <h3>AI Agent Fundamentals</h3>
+                            <p>Learn the core concepts of AI agents, from basic reactive agents to goal-based systems.</p>
+                            <div class="course-topics">
+                                <span class="topic">Agent Architecture</span>
+                                <span class="topic">Environment Modeling</span>
+                                <span class="topic">Basic Planning</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/12 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('fundamentals')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Beginner</div>
+                                <div class="course-duration">4 weeks</div>
+                            </div>
+                            <h3>Python for AI Agents</h3>
+                            <p>Master Python programming specifically for building AI agents and automation systems.</p>
+                            <div class="course-topics">
+                                <span class="topic">OOP for Agents</span>
+                                <span class="topic">Async Programming</span>
+                                <span class="topic">API Integration</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/10 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('python')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Beginner</div>
+                                <div class="course-duration">3 weeks</div>
+                            </div>
+                            <h3>Your First Agent</h3>
+                            <p>Build your first working AI agent step-by-step with guided tutorials and code examples.</p>
+                            <div class="course-topics">
+                                <span class="topic">Setup Environment</span>
+                                <span class="topic">Basic Agent Loop</span>
+                                <span class="topic">Tool Integration</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/8 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('first-agent')">Start Course</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="intermediate">
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Intermediate</div>
+                                <div class="course-duration">8 weeks</div>
+                            </div>
+                            <h3>Advanced Agent Architectures</h3>
+                            <p>Explore sophisticated agent patterns including ReAct, Chain-of-Thought, and Multi-Agent Systems.</p>
+                            <div class="course-topics">
+                                <span class="topic">ReAct Pattern</span>
+                                <span class="topic">Memory Systems</span>
+                                <span class="topic">Multi-Agent Coordination</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/15 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('advanced-architectures')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Intermediate</div>
+                                <div class="course-duration">6 weeks</div>
+                            </div>
+                            <h3>Tool-Using Agents</h3>
+                            <p>Build agents that can use external tools, APIs, and integrate with existing systems.</p>
+                            <div class="course-topics">
+                                <span class="topic">Function Calling</span>
+                                <span class="topic">API Integration</span>
+                                <span class="topic">Error Handling</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/12 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('tool-agents')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Intermediate</div>
+                                <div class="course-duration">7 weeks</div>
+                            </div>
+                            <h3>Agent Memory & Learning</h3>
+                            <p>Implement persistent memory, learning mechanisms, and adaptive behavior in AI agents.</p>
+                            <div class="course-topics">
+                                <span class="topic">Vector Databases</span>
+                                <span class="topic">Episodic Memory</span>
+                                <span class="topic">Online Learning</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/14 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('memory-learning')">Start Course</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="advanced">
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Advanced</div>
+                                <div class="course-duration">10 weeks</div>
+                            </div>
+                            <h3>Autonomous AI Systems</h3>
+                            <p>Design and build fully autonomous agents capable of complex reasoning and long-term planning.</p>
+                            <div class="course-topics">
+                                <span class="topic">Goal Planning</span>
+                                <span class="topic">Task Decomposition</span>
+                                <span class="topic">Execution Monitoring</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/20 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('autonomous-systems')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Advanced</div>
+                                <div class="course-duration">8 weeks</div>
+                            </div>
+                            <h3>Multi-Agent Orchestration</h3>
+                            <p>Build systems with multiple specialized agents working together towards common goals.</p>
+                            <div class="course-topics">
+                                <span class="topic">Agent Communication</span>
+                                <span class="topic">Workflow Orchestration</span>
+                                <span class="topic">Conflict Resolution</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/16 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('multi-agent')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Advanced</div>
+                                <div class="course-duration">12 weeks</div>
+                            </div>
+                            <h3>Production AI Agents</h3>
+                            <p>Deploy, monitor, and scale AI agents in production environments with enterprise-grade reliability.</p>
+                            <div class="course-topics">
+                                <span class="topic">Deployment Strategies</span>
+                                <span class="topic">Monitoring & Observability</span>
+                                <span class="topic">Security & Safety</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/24 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('production-agents')">Start Course</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="specialization">
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Specialization</div>
+                                <div class="course-duration">6 weeks</div>
+                            </div>
+                            <h3>Code Generation Agents</h3>
+                            <p>Build agents that can write, review, and refactor code across multiple programming languages.</p>
+                            <div class="course-topics">
+                                <span class="topic">AST Manipulation</span>
+                                <span class="topic">Code Analysis</span>
+                                <span class="topic">Test Generation</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/12 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('code-agents')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Specialization</div>
+                                <div class="course-duration">8 weeks</div>
+                            </div>
+                            <h3>Research & Analysis Agents</h3>
+                            <p>Create agents that can conduct research, analyze data, and generate insights from complex information.</p>
+                            <div class="course-topics">
+                                <span class="topic">Web Scraping</span>
+                                <span class="topic">Data Analysis</span>
+                                <span class="topic">Report Generation</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/16 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('research-agents')">Start Course</button>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-header">
+                                <div class="course-level">Specialization</div>
+                                <div class="course-duration">10 weeks</div>
+                            </div>
+                            <h3>Creative AI Agents</h3>
+                            <p>Develop agents for creative tasks: content creation, image generation, music composition, and more.</p>
+                            <div class="course-topics">
+                                <span class="topic">Content Generation</span>
+                                <span class="topic">Multi-modal Creation</span>
+                                <span class="topic">Style Transfer</span>
+                            </div>
+                            <div class="course-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <span>0/20 lessons</span>
+                            </div>
+                            <button class="btn btn-course" onclick="startCourse('creative-agents')">Start Course</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Playground -->
+    <section id="playground" class="playground">
+        <div class="container">
+            <h2 class="section-title">AI Agent Playground</h2>
+            <p class="section-subtitle">Experiment with different agent architectures in real-time</p>
+            
+            <div class="playground-container">
+                <div class="playground-sidebar">
+                    <h3>Agent Configuration</h3>
+                    <div class="config-section">
+                        <label>Agent Type</label>
+                        <select id="agent-type" onchange="updateAgentConfig()">
+                            <option value="reactive">Reactive Agent</option>
+                            <option value="deliberative">Deliberative Agent</option>
+                            <option value="hybrid">Hybrid Agent</option>
+                            <option value="multi-agent">Multi-Agent System</option>
+                        </select>
+                    </div>
+                    
+                    <div class="config-section">
+                        <label>Environment</label>
+                        <select id="environment" onchange="updateEnvironment()">
+                            <option value="gridworld">Grid World</option>
+                            <option value="chatbot">Chatbot Environment</option>
+                            <option value="web-automation">Web Automation</option>
+                            <option value="data-analysis">Data Analysis</option>
+                        </select>
+                    </div>
+                    
+                    <div class="config-section">
+                        <label>Tools Available</label>
+                        <div class="tool-checkboxes">
+                            <label><input type="checkbox" id="tool-search" checked> Web Search</label>
+                            <label><input type="checkbox" id="tool-calculator"> Calculator</label>
+                            <label><input type="checkbox" id="tool-database"> Database</label>
+                            <label><input type="checkbox" id="tool-email"> Email</label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="runAgent()">Run Agent</button>
+                    <button class="btn btn-secondary" onclick="resetPlayground()">Reset</button>
+                </div>
+                
+                <div class="playground-main">
+                    <div class="agent-visualization">
+                        <div id="agent-display" class="agent-canvas">
+                            <div class="agent-thinking">
+                                <div class="thought-bubble">
+                                    <p id="agent-thoughts">Agent is ready to start...</p>
+                                </div>
+                            </div>
+                            <div class="agent-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-controls">
+                        <input type="text" id="user-input" placeholder="Give the agent a task or ask a question..." onkeypress="handleUserInput(event)">
+                        <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                    </div>
+                    
+                    <div class="execution-log">
+                        <h4>Execution Log</h4>
+                        <div id="log-output" class="log-content">
+                            <div class="log-entry system">
+                                <span class="timestamp">[00:00:00]</span>
+                                <span class="message">System: Agent initialized and ready</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Gallery -->
+    <section id="examples" class="examples">
+        <div class="container">
+            <h2 class="section-title">Agent Examples Gallery</h2>
+            <p class="section-subtitle">Explore real working AI agents with source code and explanations</p>
+            
+            <div class="example-filters">
+                <button class="filter-btn active" data-filter="all">All Examples</button>
+                <button class="filter-btn" data-filter="productivity">Productivity</button>
+                <button class="filter-btn" data-filter="automation">Automation</button>
+                <button class="filter-btn" data-filter="analysis">Analysis</button>
+                <button class="filter-btn" data-filter="creative">Creative</button>
+            </div>
+            
+            <div class="examples-grid">
+                <div class="example-card" data-category="productivity">
+                    <div class="example-header">
+                        <div class="example-type">Productivity</div>
+                        <div class="example-complexity">Beginner</div>
+                    </div>
+                    <h3>Personal Task Manager Agent</h3>
+                    <p>An AI agent that manages your daily tasks, sets reminders, and prioritizes your workload based on deadlines and importance.</p>
+                    <div class="example-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">LangChain</span>
+                        <span class="tech-tag">SQLite</span>
+                    </div>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" onclick="viewExample('task-manager')">View Code</button>
+                        <button class="btn btn-primary" onclick="runExample('task-manager')">Try Live</button>
+                    </div>
+                </div>
+                
+                <div class="example-card" data-category="automation">
+                    <div class="example-header">
+                        <div class="example-type">Automation</div>
+                        <div class="example-complexity">Intermediate</div>
+                    </div>
+                    <h3>Email Response Agent</h3>
+                    <p>Automatically categorizes, prioritizes, and drafts responses to emails based on context and your writing style.</p>
+                    <div class="example-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">OpenAI API</span>
+                        <span class="tech-tag">IMAP</span>
+                    </div>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" onclick="viewExample('email-agent')">View Code</button>
+                        <button class="btn btn-primary" onclick="runExample('email-agent')">Try Live</button>
+                    </div>
+                </div>
+                
+                <div class="example-card" data-category="analysis">
+                    <div class="example-header">
+                        <div class="example-type">Analysis</div>
+                        <div class="example-complexity">Advanced</div>
+                    </div>
+                    <h3>Market Research Agent</h3>
+                    <p>Conducts comprehensive market research by scraping data, analyzing trends, and generating detailed reports with visualizations.</p>
+                    <div class="example-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Scrapy</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Plotly</span>
+                    </div>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" onclick="viewExample('research-agent')">View Code</button>
+                        <button class="btn btn-primary" onclick="runExample('research-agent')">Try Live</button>
+                    </div>
+                </div>
+                
+                <div class="example-card" data-category="creative">
+                    <div class="example-header">
+                        <div class="example-type">Creative</div>
+                        <div class="example-complexity">Intermediate</div>
+                    </div>
+                    <h3>Content Creation Agent</h3>
+                    <p>Generates blog posts, social media content, and marketing copy tailored to your brand voice and target audience.</p>
+                    <div class="example-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">GPT-4</span>
+                        <span class="tech-tag">DALL-E</span>
+                    </div>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" onclick="viewExample('content-agent')">View Code</button>
+                        <button class="btn btn-primary" onclick="runExample('content-agent')">Try Live</button>
+                    </div>
+                </div>
+                
+                <div class="example-card" data-category="automation">
+                    <div class="example-header">
+                        <div class="example-type">Automation</div>
+                        <div class="example-complexity">Advanced</div>
+                    </div>
+                    <h3>DevOps Assistant Agent</h3>
+                    <p>Monitors infrastructure, handles deployments, and troubleshoots issues automatically using CI/CD pipelines and monitoring tools.</p>
+                    <div class="example-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Docker</span>
+                        <span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">Prometheus</span>
+                    </div>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" onclick="viewExample('devops-agent')">View Code</button>
+                        <button class="btn btn-primary" onclick="runExample('devops-agent')">Try Live</button>
+                    </div>
+                </div>
+                
+                <div class="example-card" data-category="productivity">
+                    <div class="example-header">
+                        <div class="example-type">Productivity</div>
+                        <div class="example-complexity">Beginner</div>
+                    </div>
+                    <h3>Meeting Summary Agent</h3>
+                    <p>Joins virtual meetings, takes notes, extracts action items, and sends summaries to all participants.</p>
+                    <div class="example-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Whisper</span>
+                        <span class="tech-tag">Zoom SDK</span>
+                    </div>
+                    <div class="example-actions">
+                        <button class="btn btn-secondary" onclick="viewExample('meeting-agent')">View Code</button>
+                        <button class="btn btn-primary" onclick="runExample('meeting-agent')">Try Live</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorials Section -->
+    <section id="tutorials" class="tutorials">
+        <div class="container">
+            <h2 class="section-title">Step-by-Step Tutorials</h2>
+            <p class="section-subtitle">Follow along with detailed tutorials to build your first AI agents</p>
+            
+            <div class="tutorial-list">
+                <div class="tutorial-item">
+                    <div class="tutorial-number">01</div>
+                    <div class="tutorial-content">
+                        <h3>Building Your First Reactive Agent</h3>
+                        <p>Start with the basics - create a simple reactive agent that responds to environmental stimuli.</p>
+                        <div class="tutorial-meta">
+                            <span class="duration"><i class="fas fa-clock"></i> 45 min</span>
+                            <span class="difficulty">Beginner</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="openTutorial('reactive-agent')">Start Tutorial</button>
+                    </div>
+                </div>
+                
+                <div class="tutorial-item">
+                    <div class="tutorial-number">02</div>
+                    <div class="tutorial-content">
+                        <h3>Adding Memory to Your Agent</h3>
+                        <p>Enhance your agent with persistent memory to remember past interactions and learn from experience.</p>
+                        <div class="tutorial-meta">
+                            <span class="duration"><i class="fas fa-clock"></i> 60 min</span>
+                            <span class="difficulty">Intermediate</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="openTutorial('memory-agent')">Start Tutorial</button>
+                    </div>
+                </div>
+                
+                <div class="tutorial-item">
+                    <div class="tutorial-number">03</div>
+                    <div class="tutorial-content">
+                        <h3>Tool Integration and Function Calling</h3>
+                        <p>Connect your agent to external APIs and tools to expand its capabilities beyond text generation.</p>
+                        <div class="tutorial-meta">
+                            <span class="duration"><i class="fas fa-clock"></i> 90 min</span>
+                            <span class="difficulty">Intermediate</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="openTutorial('tool-integration')">Start Tutorial</button>
+                    </div>
+                </div>
+                
+                <div class="tutorial-item">
+                    <div class="tutorial-number">04</div>
+                    <div class="tutorial-content">
+                        <h3>Multi-Agent Communication</h3>
+                        <p>Create systems where multiple agents work together, communicate, and coordinate their actions.</p>
+                        <div class="tutorial-meta">
+                            <span class="duration"><i class="fas fa-clock"></i> 120 min</span>
+                            <span class="difficulty">Advanced</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="openTutorial('multi-agent-comm')">Start Tutorial</button>
+                    </div>
+                </div>
+                
+                <div class="tutorial-item">
+                    <div class="tutorial-number">05</div>
+                    <div class="tutorial-content">
+                        <h3>Deploying Agents to Production</h3>
+                        <p>Learn how to deploy, monitor, and scale your AI agents in production environments.</p>
+                        <div class="tutorial-meta">
+                            <span class="duration"><i class="fas fa-clock"></i> 150 min</span>
+                            <span class="difficulty">Advanced</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="openTutorial('production-deployment')">Start Tutorial</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="community">
+        <div class="container">
+            <h2 class="section-title">Join the Community</h2>
+            <p class="section-subtitle">Connect with fellow AI agent developers and experts</p>
+            
+            <div class="community-grid">
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Discord Community</h3>
+                    <p>Join our active Discord server with 10,000+ developers discussing the latest in AI agent development.</p>
+                    <button class="btn btn-primary">Join Discord</button>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3>Open Source Projects</h3>
+                    <p>Contribute to our open source agent frameworks and explore community-built examples.</p>
+                    <button class="btn btn-primary">View GitHub</button>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Expert Office Hours</h3>
+                    <p>Get direct help from AI researchers and industry experts in weekly office hour sessions.</p>
+                    <button class="btn btn-primary">Book Session</button>
+                </div>
+                
+                <div class="community-card">
+                    <div class="community-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Agent Competitions</h3>
+                    <p>Participate in monthly competitions to showcase your agents and win prizes.</p>
+                    <button class="btn btn-primary">Enter Competition</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Agent Academy</span>
+                    </div>
+                    <p>Empowering developers to build the next generation of intelligent AI agents.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Learning</h4>
+                    <ul>
+                        <li><a href="#courses">Courses</a></li>
+                        <li><a href="#tutorials">Tutorials</a></li>
+                        <li><a href="#examples">Examples</a></li>
+                        <li><a href="#playground">Playground</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#community">Discord</a></li>
+                        <li><a href="#community">GitHub</a></li>
+                        <li><a href="#community">Office Hours</a></li>
+                        <li><a href="#community">Competitions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 AI Agent Academy. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

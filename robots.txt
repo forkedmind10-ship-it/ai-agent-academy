@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://ai-agent-academy.vercel.app/sitemap.xml
+
+# Block sensitive files
+Disallow: /.env
+Disallow: /config/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /.vercel/
+
+# Allow all educational content
+Allow: /courses/
+Allow: /tutorials/
+Allow: /examples/
+
+# Crawl delay (optional)
+Crawl-delay: 1

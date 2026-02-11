@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 AI Agent Academy - Learn AI by Building Agents</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 2rem;
+            color: white;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .main-container {
+            flex: 1;
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 10px;
+            padding: 1rem;
+            height: fit-content;
+        }
+        
+        .content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 2rem;
+            min-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .nav-button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+        
+        .nav-button.active {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .agent-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 500px;
+        }
+        
+        .builder-panel {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+            background: #f9f9f9;
+        }
+        
+        .components-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .component {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+            user-select: none;
+        }
+        
+        .component:hover {
+            transform: scale(1.05);
+        }
+        
+        .component:active {
+            transform: scale(0.95);
+        }
+        
+        .agent-canvas {
+            position: relative;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .placed-component {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            margin: 0.2rem;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        
+        .placed-component:hover {
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+        
+        .training-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .data-panel, .results-panel {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+            margin: 0.5rem 0;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .challenge-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s;
+        }
+        
+        .challenge-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .challenge-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .difficulty.easy { background: #e8f5e8; color: #4caf50; }
+        .difficulty.medium { background: #fff3cd; color: #ff9800; }
+        .difficulty.hard { background: #f8d7da; color: #f44336; }
+        
+        .reward {
+            color: #667eea;
+            font-weight: bold;
+            float: right;
+        }
+        
+        .training-log {
+            background: #000;
+            color: #0f0;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            height: 150px;
+            overflow-y: scroll;
+            font-size: 0.8rem;
+        }
+        
+        .welcome-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .agent-summary {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                display: flex;
+                gap: 0.5rem;
+                overflow-x: auto;
+                padding: 0.5rem;
+            }
+            
+            .nav-button {
+                min-width: 120px;
+                margin: 0;
+            }
+            
+            .agent-builder,
+            .training-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🤖 AI Agent Academy</div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="compute-credits">1000</div>
+                <div>Credits</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="agents-built">0</div>
+                <div>Agents</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="level">1</div>
+                <div>Level</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="sidebar">
+            <button class="nav-button active" onclick="showSection('welcome')">🏠 Welcome</button>
+            <button class="nav-button" onclick="showSection('builder')">🔧 Build Agent</button>
+            <button class="nav-button" onclick="showSection('training')">📊 Train</button>
+            <button class="nav-button" onclick="showSection('challenges')">🎯 Challenges</button>
+            <button class="nav-button" onclick="showSection('gallery')">🏆 Gallery</button>
+        </div>
+        
+        <div class="content">
+            <!-- Welcome Section -->
+            <div id="welcome" class="section active">
+                <h1>Welcome to AI Agent Academy! 🤖</h1>
+                <p style="font-size: 1.2rem; margin: 1rem 0; line-height: 1.6; color: #555;">
+                    Learn artificial intelligence by building your own AI agents! Master neural networks, 
+                    training data, and real-world applications through hands-on experimentation.
+                </p>
+                
+                <div class="welcome-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Build Neural Networks</h3>
+                        <p>Create AI architectures by dragging and dropping layers. See how data flows through your network.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Train Your Agents</h3>
+                        <p>Feed datasets to your agents and watch them learn. Understand training, accuracy, and optimization.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Solve Challenges</h3>
+                        <p>Apply your agents to real problems: sentiment analysis, image recognition, and more.</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button class="btn" onclick="showSection('builder')" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                        🚀 Start Building Your First Agent
+                    </button>
+                </div>
+                
+                <div style="background: rgba(0,123,255,0.1); padding: 1rem; border-radius: 10px; margin: 2rem 0;">
+                    <h3>🎮 How to Play:</h3>
+                    <ol style="margin: 1rem 0; padding-left: 2rem; line-height: 1.6;">
+                        <li><strong>Build:</strong> Drag components to create your neural network</li>
+                        <li><strong>Compile:</strong> Validate your network architecture</li>
+                        <li><strong>Train:</strong> Feed data to your agent and watch it learn</li>
+                        <li><strong>Challenge:</strong> Test your trained agent on real problems</li>
+                        <li><strong>Level Up:</strong> Earn credits and unlock new features</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- Agent Builder Section -->
+            <div id="builder" class="section">
+                <h2>🔧 AI Agent Builder</h2>
+                <p style="margin-bottom: 2rem; color: #666;">Click components below to add them to your neural network:</p>
+                
+                <div class="agent-builder">
+                    <div class="builder-panel">
+                        <h3 style="margin-bottom: 1rem; color: #666;">Available Components</h3>
+                        <div class="components-panel">
+                            <div class="component" onclick="addComponent('input')">
+                                📥 Input Layer<br><small>Receives data</small>
+                            </div>
+                            <div class="component" onclick="addComponent('dense')">
+                                🧠 Dense Layer<br><small>Fully connected neurons</small>
+                            </div>
+                            <div class="component" onclick="addComponent('conv')">
+                                🔍 Conv Layer<br><small>Feature detection</small>
+                            </div>
+                            <div class="component" onclick="addComponent('dropout')">
+                                🎯 Dropout<br><small>Prevents overfitting</small>
+                            </div>
+                            <div class="component" onclick="addComponent('output')">
+                                📤 Output Layer<br><small>Final predictions</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="builder-panel agent-canvas" id="agent-canvas">
+                        <h3 style="margin-bottom: 1rem; color: #666;">Your Neural Network</h3>
+                        <div style="text-align: center; margin-top: 100px; color: #999;">
+                            Click components to build your agent
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="btn" onclick="compileAgent()">🔨 Compile Agent</button>
+                    <button class="btn" onclick="clearCanvas()">🗑️ Clear Canvas</button>
+                </div>
+                
+                <div id="agent-summary" class="agent-summary" style="display: none;">
+                    <h4>✅ Agent Summary:</h4>
+                    <div id="summary-content"></div>
+                </div>
+            </div>
+            
+            <!-- Training Arena Section -->
+            <div id="training" class="section">
+                <h2>📊 Training Arena</h2>
+                <p style="margin-bottom: 2rem; color: #666;">Train your compiled agent on different datasets:</p>
+                
+                <div class="training-area">
+                    <div class="data-panel">
+                        <h3>📁 Training Setup</h3>
+                        
+                        <label>Dataset:</label>
+                        <select id="dataset-select" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px; border: 1px solid #ccc;">
+                            <option value="images">🖼️ Image Classification (CIFAR-10)</option>
+                            <option value="text">📝 Text Sentiment Analysis</option>
+                            <option value="numbers">🔢 Handwritten Digits (MNIST)</option>
+                        </select>
+                        
+                        <div style="margin: 1rem 0;">
+                            <label>Learning Rate: <span id="lr-value">0.01</span></label><br>
+                            <input type="range" id="learning-rate" min="0.001" max="0.1" step="0.001" value="0.01" style="width: 100%;" oninput="document.getElementById('lr-value').textContent = this.value">
+                        </div>
+                        
+                        <div style="margin: 1rem 0;">
+                            <label>Batch Size: <span id="batch-value">32</span></label><br>
+                            <input type="range" id="batch-size" min="16" max="128" step="16" value="32" style="width: 100%;" oninput="document.getElementById('batch-value').textContent = this.value">
+                        </div>
+                        
+                        <div style="margin: 1rem 0;">
+                            <strong>Training Cost: <span id="training-cost">0</span> Credits</strong>
+                        </div>
+                        
+                        <button class="btn" onclick="startTraining()" id="train-btn">🎯 Start Training</button>
+                    </div>
+                    
+                    <div class="results-panel">
+                        <h3>📈 Training Results</h3>
+                        <div>
+                            <p>Accuracy: <span id="accuracy">0%</span></p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="accuracy-bar"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p>Progress: <span id="progress">0%</span></p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-bar"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="training-log" id="training-log">
+                            > Agent ready for training...<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Challenges Section -->
+            <div id="challenges" class="section">
+                <h2>🎯 AI Challenges</h2>
+                <p style="margin-bottom: 2rem; color: #666;">Test your trained agents on real-world problems:</p>
+                
+                <div class="challenge-card">
+                    <span class="difficulty easy">Easy</span>
+                    <span class="reward">+100 Credits</span>
+                    <h3>📱 App Review Classifier</h3>
+                    <p>Build an agent that classifies app store reviews as positive or negative. Perfect for learning text processing and sentiment analysis.</p>
+                    <button class="btn" onclick="startChallenge('reviews')">Start Challenge</button>
+                </div>
+                
+                <div class="challenge-card">
+                    <span class="difficulty medium">Medium</span>
+                    <span class="reward">+250 Credits</span>
+                    <h3>🖼️ Image Recognition System</h3>
+                    <p>Create an agent that identifies objects in photos. Learn about convolutional neural networks and computer vision.</p>
+                    <button class="btn" onclick="startChallenge('images')">Start Challenge</button>
+                </div>
+                
+                <div class="challenge-card">
+                    <span class="difficulty hard">Hard</span>
+                    <span class="reward">+500 Credits</span>
+                    <h3>🎵 Music Recommendation Engine</h3>
+                    <p>Build a sophisticated recommendation system. Master collaborative filtering and matrix factorization techniques.</p>
+                    <button class="btn" onclick="startChallenge('music')">Start Challenge</button>
+                </div>
+                
+                <div class="challenge-card">
+                    <span class="difficulty hard">Hard</span>
+                    <span class="reward">+750 Credits</span>
+                    <h3>🤖 Chatbot Assistant</h3>
+                    <p>Create an intelligent chatbot that understands context and provides helpful responses. Learn natural language processing.</p>
+                    <button class="btn" onclick="startChallenge('chatbot')">Start Challenge</button>
+                </div>
+            </div>
+            
+            <!-- Gallery Section -->
+            <div id="gallery" class="section">
+                <h2>🏆 Agent Gallery</h2>
+                <p style="margin-bottom: 2rem; color: #666;">Your trained agents and their achievements:</p>
+                
+                <div id="agent-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                    <div class="challenge-card" style="text-align: center; color: #999;">
+                        <h3>🤖 No agents built yet!</h3>
+                        <p>Build and train your first agent to see it appear here.</p>
+                        <button class="btn" onclick="showSection('builder')">Build Your First Agent</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete AI Agent Academy Game Logic
+        class AIAgentGame {
+            constructor() {
+                this.gameState = {
+                    computeCredits: 1000,
+                    agentsBuilt: 0,
+                    level: 1,
+                    builtAgents: [],
+                    currentAgent: {
+                        components: [],
+                        compiled: false,
+                        trained: false,
+                        accuracy: 0
+                    }
+                };
+                this.isTraining = false;
+                this.init();
+            }
+            
+            init() {
+                this.updateUI();
+                this.logMessage('🤖 Welcome to AI Agent Academy!');
+                this.logMessage('Click components to build your first neural network.');
+            }
+            
+            showSection(sectionId) {
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                document.getElementById(sectionId).classList.add('active');
+                event.target.classList.add('active');
+            }
+            
+            addComponent(type) {
+                const componentNames = {
+                    input: '📥 Input Layer',
+                    dense: '🧠 Dense Layer',
+                    conv: '🔍 Conv Layer',
+                    dropout: '🎯 Dropout Layer',
+                    output: '📤 Output Layer'
+                };
+                
+                this.gameState.currentAgent.components.push(type);
+                this.updateCanvas();
+                this.logMessage(`Added ${componentNames[type]} to your network`);
+                this.updateTrainingCost();
+                
+                // Reset compiled/trained status
+                this.gameState.currentAgent.compiled = false;
+                this.gameState.currentAgent.trained = false;
+                document.getElementById('agent-summary').style.display = 'none';
+            }
+            
+            updateCanvas() {
+                const canvas = document.getElementById('agent-canvas');
+                const components = this.gameState.currentAgent.components;
+                
+                if (components.length === 0) {
+                    canvas.innerHTML = `
+                        <h3 style="margin-bottom: 1rem; color: #666;">Your Neural Network</h3>
+                        <div style="text-align: center; margin-top: 100px; color: #999;">
+                            Click components to build your agent
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const componentNames = {
+                    input: '📥 Input',
+                    dense: '🧠 Dense',
+                    conv: '🔍 Conv',
+                    dropout: '🎯 Dropout',
+                    output: '📤 Output'
+                };
+                
+                let html = '<h3 style="margin-bottom: 1rem; color: #666;">Your Neural Network</h3>';
+                components.forEach((comp, index) => {
+                    html += `<div class="placed-component" onclick="removeComponent(${index})" title="Click to remove">${componentNames[comp]}</div>`;
+                });
+                html += '<p style="font-size: 0.8rem; color: #999; margin-top: 1rem;">Click components to remove them</p>';
+                
+                canvas.innerHTML = html;
+            }
+            
+            removeComponent(index) {
+                this.gameState.currentAgent.components.splice(index, 1);
+                this.updateCanvas();
+                this.updateTrainingCost();
+                this.logMessage('Component removed');
+                
+                // Reset states
+                this.gameState.currentAgent.compiled = false;
+                this.gameState.currentAgent.trained = false;
+                document.getElementById('agent-summary').style.display = 'none';
+            }
+            
+            clearCanvas() {
+                this.gameState.currentAgent = {
+                    components: [],
+                    compiled: false,
+                    trained: false,
+                    accuracy: 0
+                };
+                this.updateCanvas();
+                this.updateTrainingCost();
+                this.logMessage('Canvas cleared');
+                document.getElementById('agent-summary').style.display = 'none';
+            }
+            
+            compileAgent() {
+                const components = this.gameState.currentAgent.components;
+                
+                if (components.length === 0) {
+                    alert('Please add some components to your agent first!');
+                    return;
+                }
+                
+                const hasInput = components.includes('input');
+                const hasOutput = components.includes('output');
+                
+                if (!hasInput || !hasOutput) {
+                    alert('Your agent needs at least an Input Layer and an Output Layer!');
+                    return;
+                }
+                
+                this.gameState.currentAgent.compiled = true;
+                this.showAgentSummary();
+                this.logMessage('✅ Agent compiled successfully!');
+                
+                // Award credits for compilation
+                this.gameState.computeCredits += 50;
+                this.updateUI();
+                this.logMessage('+50 credits for compiling an agent!');
+            }
+            
+            showAgentSummary() {
+                const summary = document.getElementById('agent-summary');
+                const content = document.getElementById('summary-content');
+                const components = this.gameState.currentAgent.components;
+                
+                const componentNames = {
+                    input: '📥 Input Layer',
+                    dense: '🧠 Dense Layer',
+                    conv: '🔍 Convolutional Layer',
+                    dropout: '🎯 Dropout Layer',
+                    output: '📤 Output Layer'
+                };
+                
+                let summaryHTML = '<ul>';
+                components.forEach(comp => {
+                    summaryHTML += `<li>${componentNames[comp]}</li>`;
+                });
+                summaryHTML += '</ul>';
+                
+                const params = this.calculateParameters(components);
+                const cost = this.calculateTrainingCost(components);
+                
+                summaryHTML += `<p><strong>Estimated Parameters:</strong> ${params.toLocaleString()}</p>`;
+                summaryHTML += `<p><strong>Training Cost:</strong> ${cost} credits</p>`;
+                
+                content.innerHTML = summaryHTML;
+                summary.style.display = 'block';
+            }
+            
+            calculateParameters(components) {
+                let params = 1000; // Base parameters
+                components.forEach(comp => {
+                    switch(comp) {
+                        case 'input': params += 784; break;
+                        case 'dense': params += 8192; break;
+                        case 'conv': params += 2048; break;
+                        case 'dropout': params += 0; break;
+                        case 'output': params += 640; break;
+                    }
+                });
+                return params;
+            }
+            
+            calculateTrainingCost(components) {
+                return Math.max(100, components.length * 75);
+            }
+            
+            updateTrainingCost() {
+                const cost = this.calculateTrainingCost(this.gameState.currentAgent.components);
+                document.getElementById('training-cost').textContent = cost;
+            }
+            
+            async startTraining() {
+                if (!this.gameState.currentAgent.compiled) {
+                    alert('Please compile your agent first!');
+                    return;
+                }
+                
+                if (this.isTraining) {
+                    alert('Training is already in progress!');
+                    return;
+                }
+                
+                const cost = this.calculateTrainingCost(this.gameState.currentAgent.components);
+                
+                if (this.gameState.computeCredits < cost) {
+                    alert(`Not enough credits! You need ${cost} but only have ${this.gameState.computeCredits}.`);
+                    return;
+                }
+                
+                // Start training
+                this.isTraining = true;
+                this.gameState.computeCredits -= cost;
+                this.updateUI();
+                
+                const trainBtn = document.getElementById('train-btn');
+                trainBtn.textContent = '⏳ Training...';
+                trainBtn.disabled = true;
+                
+                // Simulate training
+                await this.simulateTraining();
+                
+                // Complete training
+                this.isTraining = false;
+                trainBtn.textContent = '🎯 Start Training';
+                trainBtn.disabled = false;
+                
+                this.gameState.currentAgent.trained = true;
+                this.saveAgent();
+            }
+            
+            async simulateTraining() {
+                const progressBar = document.getElementById('progress-bar');
+                const accuracyBar = document.getElementById('accuracy-bar');
+                const progressText = document.getElementById('progress');
+                const accuracyText = document.getElementById('accuracy');
+                const dataset = document.getElementById('dataset-select').value;
+                const learningRate = document.getElementById('learning-rate').value;
+                const batchSize = document.getElementById('batch-size').value;
+                
+                this.logMessage(`🎯 Starting training...`);
+                this.logMessage(`Dataset: ${dataset}`);
+                this.logMessage(`Learning Rate: ${learningRate}, Batch Size: ${batchSize}`);
+                this.logMessage('');
+                
+                const epochs = 10;
+                for (let epoch = 1; epoch <= epochs; epoch++) {
+                    await this.sleep(500);
+                    
+                    const progress = (epoch / epochs) * 100;
+                    const accuracy = Math.min(95, 15 + epoch * 8 + Math.random() * 12);
+                    
+                    progressBar.style.width = progress + '%';
+                    accuracyBar.style.width = accuracy + '%';
+                    progressText.textContent = Math.round(progress) + '%';
+                    accuracyText.textContent = Math.round(accuracy) + '%';
+                    
+                    this.gameState.currentAgent.accuracy = accuracy;
+                    
+                    const loss = (3 - accuracy/30).toFixed(4);
+                    this.logMessage(`Epoch ${epoch}/${epochs} - Accuracy: ${Math.round(accuracy)}% - Loss: ${loss}`);
+                }
+                
+                this.logMessage('');
+                this.logMessage('✅ Training completed successfully!');
+                
+                // Bonus for high accuracy
+                if (this.gameState.currentAgent.accuracy > 85) {
+                    const bonus = Math.round((this.gameState.currentAgent.accuracy - 85) * 15);
+                    this.gameState.computeCredits += bonus;
+                    this.updateUI();
+                    this.logMessage(`🎉 Excellent accuracy bonus: +${bonus} credits!`);
+                }
+            }
+            
+            saveAgent() {
+                const agent = {
+                    id: Date.now(),
+                    name: `Agent ${this.gameState.agentsBuilt + 1}`,
+                    components: [...this.gameState.currentAgent.components],
+                    accuracy: this.gameState.currentAgent.accuracy,
+                    trainedOn: document.getElementById('dataset-select').value,
+                    createdAt: new Date().toLocaleDateString(),
+                    parameters: this.calculateParameters(this.gameState.currentAgent.components)
+                };
+                
+                this.gameState.builtAgents.push(agent);
+                this.gameState.agentsBuilt++;
+                
+                // Level up every 3 agents
+                if (this.gameState.agentsBuilt % 3 === 0) {
+                    this.gameState.level++;
+                    this.gameState.computeCredits += 300;
+                    this.logMessage(`🎉 LEVEL UP! You are now level ${this.gameState.level}!`);
+                    this.logMessage(`+300 credits level bonus!`);
+                }
+                
+                this.updateUI();
+                this.updateGallery();
+                this.logMessage(`Agent "${agent.name}" saved to gallery!`);
+            }
+            
+            updateGallery() {
+                const gallery = document.getElementById('agent-list');
+                gallery.innerHTML = '';
+                
+                if (this.gameState.builtAgents.length === 0) {
+                    gallery.innerHTML = `
+                        <div class="challenge-card" style="text-align: center; color: #999;">
+                            <h3>🤖 No agents built yet!</h3>
+                            <p>Build and train your first agent to see it appear here.</p>
+                            <button class="btn" onclick="game.showSection('builder')">Build Your First Agent</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.gameState.builtAgents.forEach(agent => {
+                    const card = document.createElement('div');
+                    card.className = 'challenge-card';
+                    
+                    const badge = agent.accuracy > 90 ? '🏆 Expert' : 
+                                 agent.accuracy > 80 ? '🥈 Advanced' : 
+                                 '🥉 Beginner';
+                    
+                    card.innerHTML = `
+                        <h3>🤖 ${agent.name}</h3>
+                        <p><strong>Accuracy:</strong> ${Math.round(agent.accuracy)}%</p>
+                        <p><strong>Dataset:</strong> ${agent.trainedOn}</p>
+                        <p><strong>Components:</strong> ${agent.components.length} layers</p>
+                        <p><strong>Parameters:</strong> ${agent.parameters.toLocaleString()}</p>
+                        <p><strong>Created:</strong> ${agent.createdAt}</p>
+                        <div style="margin-top: 1rem; font-weight: bold;">
+                            ${badge}
+                        </div>
+                    `;
+                    
+                    gallery.appendChild(card);
+                });
+            }
+            
+            startChallenge(challengeType) {
+                if (!this.gameState.currentAgent.trained) {
+                    alert('You need a trained agent to attempt challenges! Build and train an agent first.');
+                    return;
+                }
+                
+                const challenges = {
+                    reviews: { name: 'App Review Classifier', reward: 100, threshold: 75 },
+                    images: { name: 'Image Recognition System', reward: 250, threshold: 80 },
+                    music: { name: 'Music Recommendation Engine', reward: 500, threshold: 85 },
+                    chatbot: { name: 'Chatbot Assistant', reward: 750, threshold: 90 }
+                };
+                
+                const challenge = challenges[challengeType];
+                const agentAccuracy = this.gameState.currentAgent.accuracy;
+                
+                if (agentAccuracy >= challenge.threshold) {
+                    this.gameState.computeCredits += challenge.reward;
+                    this.updateUI();
+                    alert(`🎉 Challenge "${challenge.name}" completed! Your agent achieved ${Math.round(agentAccuracy)}% accuracy. Earned ${challenge.reward} credits!`);
+                    this.logMessage(`✅ ${challenge.name} completed! +${challenge.reward} credits`);
+                } else {
+                    alert(`Challenge failed! "${challenge.name}" requires ${challenge.threshold}% accuracy, but your agent only achieved ${Math.round(agentAccuracy)}%. Train a better agent and try again!`);
+                    this.logMessage(`❌ ${challenge.name} failed. Required: ${challenge.threshold}%, Got: ${Math.round(agentAccuracy)}%`);
+                }
+            }
+            
+            updateUI() {
+                document.getElementById('compute-credits').textContent = this.gameState.computeCredits.toLocaleString();
+                document.getElementById('agents-built').textContent = this.gameState.agentsBuilt;
+                document.getElementById('level').textContent = this.gameState.level;
+            }
+            
+            logMessage(message) {
+                const log = document.getElementById('training-log');
+                log.innerHTML += '> ' + message + '<br>';
+                log.scrollTop = log.scrollHeight;
+            }
+            
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+        
+        // Global game instance
+        let game;
+        
+        // Global functions for HTML onclick handlers
+        function showSection(sectionId) {
+            game.showSection(sectionId);
+        }
+        
+        function addComponent(type) {
+            game.addComponent(type);
+        }
+        
+        function removeComponent(index) {
+            game.removeComponent(index);
+        }
+        
+        function clearCanvas() {
+            game.clearCanvas();
+        }
+        
+        function compileAgent() {
+            game.compileAgent();
+        }
+        
+        function startTraining() {
+            game.startTraining();
+        }
+        
+        function startChallenge(type) {
+            game.startChallenge(type);
+        }
+        
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            game = new AIAgentGame();
+        });
+    </script>
+</body>
+</html>
